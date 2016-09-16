@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 
+MY_SQL_PASSWORD=password
+
 output(){
 echo -en '\E[31m'"\033[1m$1\033[0m"
 tput sgr0
 }
 
+# stop the script if a command does not return normally
+set -e
+
 #setup apt-get so it will use a password when installing mysql
-#sudo debconf-set-selection <<< 'mysql-server mysql-server/root_password password password'
-#sudo debconf-set-selection <<< 'mysql-server mysql-server/root_password_again password password'
+sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $MY_SQL_PASSWORD"
+sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MY_SQL_PASSWORD"
 
 #Install system level dependencies
 sudo apt-get install python-dev python-virtualenv mysql-server libsqlclient-dev apache2 libapache2-mod-wsgi openjdk-8-jdk libxml2-dev libxslt-dev libjpeg-dev git-core graphicsmagick -y
@@ -38,7 +43,7 @@ else
   output "/opt/solr already exists. Skipping downloading solr 4.10.4."
 fi
 
-if ! id solr >/dev/null 2>%1
+if ! id solr >/dev/null 2>&1
 then
   sudo useradd -d /opt/solr -s /bin/bash solr
 else
@@ -82,11 +87,11 @@ mkdir -p /opt/chronam/data/bib
 
 #create mysql database
 sudo service mysql start
-sudo mysqladmin -u root password 'password'
+sudo mysqladmin -u root password "MY_SQL_PASSWORD"
 
 #TODO DEBUG
 exit 1
-echo "DROP DATABASE IF EXISTS chronam; CREATE DATABASE chronam CHARACTER SET utf8; GRANT ALL ON chronam.* to 'chronam'@'localhost' identified by 'pick_one'; GRANT ALL ON test_chronam.* to 'chronam'@'localhost' identified by 'pick_one';" | mysql -u root -p
+echo "DROP DATABASE IF EXISTS chronam; CREATE DATABASE chronam CHARACTER SET utf8; GRANT ALL ON chronam.* to 'chronam'@'localhost' identified by 'pick_one'; GRANT ALL ON test_chronam.* to 'chronam'@'localhost' identified by 'pick_one';" | mysql -u root -p $MY_SQL_PASSWORD
 
 cp /opt/chronam/settings_template.py /opt/chronam/settings.py
 
