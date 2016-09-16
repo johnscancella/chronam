@@ -14,8 +14,13 @@ set -e
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $MY_SQL_PASSWORD"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MY_SQL_PASSWORD"
 
+#add the java repo for java 8
+sudo add-apt-repository ppa:openjdk-r/ppa -y
+sudo apt-get update
+
 #Install system level dependencies
-sudo apt-get install python-dev python-virtualenv mysql-server libsqlclient-dev apache2 libapache2-mod-wsgi openjdk-8-jdk libxml2-dev libxslt-dev libjpeg-dev git-core graphicsmagick -y
+sudo apt-get install python-dev python-virtualenv mysql-server libmysqlclient-dev apache2 libapache2-mod-wsgi openjdk-8-jdk libxml2-dev libxslt-dev libjpeg-dev git-core graphicsmagick -y
+
 
 #get chronam
 if [ ! -d /opt/chronam ]
@@ -62,7 +67,7 @@ sudo service jetty start
 
 #configure apache
 sudo a2enmod cache expires rewrite cache_disk
-sudo cp /opt/chronam/conf/chronam.conf /etc/apache2/sites-available/chronam
+sudo cp /opt/chronam/conf/chronam.conf /etc/apache2/sites-available/chronam.conf
 sudo a2ensite chronam
 sudo install -o $USER -g users -d /opt/chronam/static
 sudo install -o $USER -g users -d /opt/chronam/.python-eggs
