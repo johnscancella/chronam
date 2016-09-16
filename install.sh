@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+output(){
+echo -en '\E[31m'"\033[1m$1\033[0m"
+tput sgr0
+}
+
 #setup apt-get so it will use a password when installing mysql
 #sudo debconf-set-selection <<< 'mysql-server mysql-server/root_password password password'
 #sudo debconf-set-selection <<< 'mysql-server mysql-server/root_password_again password password'
@@ -14,7 +19,7 @@ then
   sudo chown $USER:users /opt/chronam
   git clone https://github.com/LibraryOfCongress/chronam.git /opt/chronam
 else
-  echo "/opt/chronam already exists, so skipping cloning chronam."
+  output "/opt/chronam already exists, so skipping cloning chronam."
   sudo chown $USER:users /opt/chronam
 fi
 
@@ -25,19 +30,19 @@ then
   then
     wget http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz
   else
-    echo "solr-4.10.4.tgz already exists. Skipping downloading solr 4.10.4."
+    output "solr-4.10.4.tgz already exists. Skipping downloading solr 4.10.4."
   fi
   tar zxvf solr-4.10.4.tgz
   sudo mv solr-4.10.4/example/ /opt/solr
 else
-  echo "/opt/solr already exists. Skipping downloading solr 4.10.4."
+  output "/opt/solr already exists. Skipping downloading solr 4.10.4."
 fi
 
 if ! id solr >/dev/null 2>%1
 then
   sudo useradd -d /opt/solr -s /bin/bash solr
 else
-  echo "user solr already exists, skipping creating solr user"
+  output "user solr already exists, skipping creating solr user"
 fi
 sudo chown solr:solr -R /opt/solr
 
@@ -64,7 +69,7 @@ if [ ! -d ENV ]
 then
   virtualenv -p python2.7 ENV
 else
-  echo "/opt/chronam/ENV already exists, skipping creating virtual environment for python"
+  output "/opt/chronam/ENV already exists, skipping creating virtual environment for python"
 fi
 source /opt/chronam/ENV/bin/activate
 cp conf/chronam.pth ENV/lib/python2.7/site-packages/chronam.pth
