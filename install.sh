@@ -101,7 +101,6 @@ mkdir -p /opt/chronam/data/bib
 
 #create mysql database
 sudo service mysql restart
-sudo mysqladmin -u root password "MY_SQL_PASSWORD"
 
 echo "DROP DATABASE IF EXISTS chronam; CREATE DATABASE chronam CHARACTER SET utf8; GRANT ALL ON chronam.* to 'chronam'@'localhost' identified by 'pick_one'; GRANT ALL ON test_chronam.* to 'chronam'@'localhost' identified by 'pick_one';" | mysql -u root -p$MY_SQL_PASSWORD
 
