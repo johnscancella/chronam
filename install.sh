@@ -118,4 +118,9 @@ cd /opt/chronam/data
 wget --recursive --no-host-directories --cut-dirs 1 --reject index.html* --include-directories /data/batches/batch_uuml_thys_ver01/ http://chroniclingamerica.loc.gov/data/batches/batch_uuml_thys_ver01/
 django-admin.py load_batch /opt/chronam/data/batches/batch_uuml_thys_ver01
 
-sudo service httpd restart
+#make sure apache can read the cache
+sudo chgrp -R www-data /var/tmp/django_cache
+sudo chmod -R g+rw /var/tmp/django_cache
+sudo chmod  g+x /var/tmp/django_cache
+
+sudo service apache2 restart
