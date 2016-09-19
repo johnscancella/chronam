@@ -7,6 +7,15 @@ echo -en '\E[31m'"\033[1m$1\033[0m"
 tput sgr0
 }
 
+# from http://stackoverflow.com/a/246128/971169
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
 # stop the script if a command does not return normally
 set -e
 
@@ -27,7 +36,7 @@ if [ ! -d /opt/chronam ]
 then
   sudo mkdir /opt/chronam
   sudo chown $USER:users /opt/chronam
-  git clone https://github.com/LibraryOfCongress/chronam.git /opt/chronam
+  git clone $SCRIPT_DIR /opt/chronam
 else
   output "/opt/chronam already exists, so skipping cloning chronam."
   sudo chown $USER:users /opt/chronam
@@ -94,7 +103,7 @@ mkdir -p /opt/chronam/data/bib
 sudo service mysql start
 sudo mysqladmin -u root password "MY_SQL_PASSWORD"
 
-echo "DROP DATABASE IF EXISTS chronam; CREATE DATABASE chronam CHARACTER SET utf8; GRANT ALL ON chronam.* to 'chronam'@'localhost' identified by 'pick_one'; GRANT ALL ON test_chronam.* to 'chronam'@'localhost' identified by 'pick_one';" | mysql -u root -p $MY_SQL_PASSWORD
+echo "DROP DATABASE IF EXISTS chronam; CREATE DATABASE chronam CHARACTER SET utf8; GRANT ALL ON chronam.* to 'chronam'@'localhost' identified by 'pick_one'; GRANT ALL ON test_chronam.* to 'chronam'@'localhost' identified by 'pick_one';" | mysql -u root -p$MY_SQL_PASSWORD
 
 cp /opt/chronam/settings_template.py /opt/chronam/settings.py
 
