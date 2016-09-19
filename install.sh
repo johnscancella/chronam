@@ -94,8 +94,6 @@ mkdir -p /opt/chronam/data/bib
 sudo service mysql start
 sudo mysqladmin -u root password "MY_SQL_PASSWORD"
 
-#TODO DEBUG
-exit 1
 echo "DROP DATABASE IF EXISTS chronam; CREATE DATABASE chronam CHARACTER SET utf8; GRANT ALL ON chronam.* to 'chronam'@'localhost' identified by 'pick_one'; GRANT ALL ON test_chronam.* to 'chronam'@'localhost' identified by 'pick_one';" | mysql -u root -p $MY_SQL_PASSWORD
 
 cp /opt/chronam/settings_template.py /opt/chronam/settings.py
