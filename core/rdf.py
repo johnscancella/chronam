@@ -12,7 +12,7 @@ BIBO = Namespace('http://purl.org/ontology/bibo/')
 EXIF = Namespace('http://www.w3.org/2003/12/exif/ns#')
 FOAF = Namespace('http://xmlns.com/foaf/0.1/')
 FRBR = Namespace('http://purl.org/vocab/frbr/core#')
-NDNP = Namespace('http://chroniclingamerica.loc.gov/terms#')
+NDNP = Namespace('https://chroniclingamerica.loc.gov/terms#')
 DCTERMS = Namespace('http://purl.org/dc/terms/')
 
 def title_to_graph(t, g=None, include_issues=True):
@@ -209,7 +209,7 @@ def add_rem(g, uri_a, uri_r):
     g.add((uri_a, ORE['isDescribedBy'], uri_r))
     g.add((uri_r, RDF.type, ORE['ResourceMap']))
     g.add((uri_r, ORE['describes'], uri_a))
-    g.add((uri_r, DCTERMS['creator'], URIRef('http://chroniclingamerica.loc.gov/awardees/dlc#awardee')))
+    g.add((uri_r, DCTERMS['creator'], URIRef('https://chroniclingamerica.loc.gov/awardees/dlc#awardee')))
 
     # TODO: would be nice if created and modified were more real somehow
     # so oai-ore bots would know when resources needed to be harvested...

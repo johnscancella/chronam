@@ -68,7 +68,7 @@ def search_pages_results(request, view_type='gallery'):
     host = request.get_host()
     format = request.GET.get('format', None)
     if format == 'atom':
-        feed_url = 'http://' + host + request.get_full_path()
+        feed_url = 'https://' + host + request.get_full_path()
         updated = rfc3339(datetime.datetime.now())
         return render_to_response('search_pages_results.xml',
                                   dictionary=locals(),
@@ -83,7 +83,7 @@ def search_pages_results(request, view_type='gallery'):
             'items': [p.solr_doc for p in page.object_list],
         }
         for i in results['items']:
-            i['url'] = 'http://' + request.get_host() + i['id'].rstrip('/') + '.json'
+            i['url'] = 'https://' + request.get_host() + i['id'].rstrip('/') + '.json'
         json_text = json.dumps(results, indent=2)
         # jsonp?
         if request.GET.get('callback') is not None:
@@ -174,7 +174,7 @@ def suggest_titles(request):
     for t in models.Title.objects.filter(lccn_q | title_q)[0:50]:
         titles.append(unicode(t))
         descriptions.append(t.lccn)
-        urls.append("http://" + host + t.url)
+        urls.append("https://" + host + t.url)
 
     suggestions = [q, titles, descriptions, urls]
     json_text = json.dumps(suggestions, indent=2)

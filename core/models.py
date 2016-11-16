@@ -53,7 +53,7 @@ class Awardee(models.Model):
     def json(self, host="chroniclingamerica.loc.gov", serialize=True):
         j = {
             "name": self.name,
-            "url": 'http://' + host + self.json_url
+            "url": 'https://' + host + self.json_url
         }
         if serialize:
             return json.dumps(j, indent=2)
@@ -149,19 +149,19 @@ class Batch(models.Model):
         b['lccns'] = self.lccns()
         b['awardee'] = {
             "name": self.awardee.name,
-            "url": "http://" + host + self.awardee.json_url
+            "url": "https://" + host + self.awardee.json_url
         }
-        b['url'] = "http://" + host + self.json_url
+        b['url'] = "https://" + host + self.json_url
         if include_issues:
             b['issues'] = []
             for issue in self.issues.all():
                 i = {
                     "title": {
                         "name": issue.title.display_name,
-                        "url": "http://" + host + issue.title.json_url,
+                        "url": "https://" + host + issue.title.json_url,
                     },
                     "date_issued": strftime(issue.date_issued, "%Y-%m-%d"),
-                    "url": "http://" + host + issue.json_url
+                    "url": "https://" + host + issue.json_url
                 }
                 b['issues'].append(i)
         if serialize:
@@ -310,7 +310,7 @@ class Title(models.Model):
 
     def json(self, serialize=True, host="chroniclingamerica.loc.gov"):
         j = {
-            "url": "http://" + host + self.json_url,
+            "url": "https://" + host + self.json_url,
             "lccn": self.lccn,
             "name": self.display_name,
             "place_of_publication": self.place_of_publication,
@@ -320,7 +320,7 @@ class Title(models.Model):
             "subject": [s.heading for s in self.subjects.all()],
             "place": [p.name for p in self.places.all()],
             "issues": [{
-                "url": "http://" + host + i.json_url,
+                "url": "https://" + host + i.json_url,
                 "date_issued": strftime(i.date_issued, "%Y-%m-%d")
             } for i in self.issues.all()]
         }
@@ -578,17 +578,17 @@ class Issue(models.Model):
 
     def json(self, serialize=True, include_pages=True, host='chroniclingamerica.loc.gov'):
         j = {
-            'url': 'http://' + host + self.json_url,
+            'url': 'https://' + host + self.json_url,
             'date_issued': strftime(self.date_issued, "%Y-%m-%d"),
             'volume': self.volume,
             'number': self.number,
             'edition': self.edition,
-            'title': {"name": self.title.display_name, "url": 'http://' + host + self.title.json_url},
-            'batch': {"name": self.batch.name, "url": 'http://' + host + self.batch.json_url},
+            'title': {"name": self.title.display_name, "url": 'https://' + host + self.title.json_url},
+            'batch': {"name": self.batch.name, "url": 'https://' + host + self.batch.json_url},
         }
 
         j['pages'] = [{
-            "url": "http://" + host + p.json_url,
+            "url": "https://" + host + p.json_url,
             "sequence": p.sequence
         } for p in self.pages.all()]
 
@@ -620,14 +620,14 @@ class Page(models.Model):
             "sequence": self.sequence,
             "issue": {
                 "date_issued": strftime(self.issue.date_issued, "%Y-%m-%d"),
-                "url": "http://" + host + self.issue.json_url},
-            "jp2": "http://" + host + self.jp2_url,
-            "ocr": "http://" + host + self.ocr_url,
-            "text": "http://" + host + self.txt_url,
-            "pdf": "http://" + host + self.pdf_url,
+                "url": "https://" + host + self.issue.json_url},
+            "jp2": "https://" + host + self.jp2_url,
+            "ocr": "https://" + host + self.ocr_url,
+            "text": "https://" + host + self.txt_url,
+            "pdf": "https://" + host + self.pdf_url,
             "title": {
                 "name": self.issue.title.display_name,
-                "url": "http://" + host + self.issue.title.json_url}
+                "url": "https://" + host + self.issue.title.json_url}
         }
         if serialize:
             return json.dumps(j, indent=2)
@@ -1197,7 +1197,7 @@ class OcrDump(models.Model):
             "created": rfc3339(self.created),
             "size": self.size,
             "sha1": self.sha1,
-            "url": "http://" + host + self.url
+            "url": "https://" + host + self.url
         }
         if serialize:
             return json.dumps(i, indent=2)

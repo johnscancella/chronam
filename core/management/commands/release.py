@@ -90,10 +90,10 @@ def preprocess_input_file(file_path):
 
 def preprocess_public_feed():
     """
-    reads the public feed - http://chroniclingamerica.loc.gov/batches/feed/
+    reads the public feed - https://chroniclingamerica.loc.gov/batches/feed/
     and returns a dictionary of {batch name: released datetime}
     """
-    feed = feedparser.parse("http://chroniclingamerica.loc.gov/batches.xml")
+    feed = feedparser.parse("https://chroniclingamerica.loc.gov/batches.xml")
     batch_release_times = {}
     for entry in feed.entries:
         batch_name = re.match(r'info:lc/ndnp/batch/(.+)', entry.id).group(1)

@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = "compares batches loaded with the public site"
 
     def handle(self, *args, **options):
-        url = 'http://chroniclingamerica.loc.gov/batches.json'
+        url = 'https://chroniclingamerica.loc.gov/batches.json'
         missing_batches = []
         missing_pages = []
         while url:

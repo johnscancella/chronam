@@ -13,7 +13,7 @@ from chronam.core.models import Essay, Title, Awardee
 
 
 DC = Namespace('http://purl.org/dc/terms/')
-NDNP = Namespace('http://chroniclingamerica.loc.gov/terms#')
+NDNP = Namespace('https://chroniclingamerica.loc.gov/terms#')
 
 
 def load_essays(feed_url, index=True):
@@ -68,7 +68,7 @@ def load_essay(essay_url, index=True):
         try:
             title = Title.objects.get(lccn=lccn)
         except Exception, e:
-            management.call_command('load_titles', 'http://chroniclingamerica.loc.gov/lccn/%s/marc.xml' % lccn)
+            management.call_command('load_titles', 'https://chroniclingamerica.loc.gov/lccn/%s/marc.xml' % lccn)
             title = Title.objects.get(lccn=lccn)
 
         # attach the title to the essay

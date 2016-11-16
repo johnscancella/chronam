@@ -64,11 +64,11 @@ def batches_json(request, page_number=1):
 
     if page.has_next():
         url_next = urlresolvers.reverse('chronam_batches_json_page', args=[page.next_page_number()])
-        j['next'] = "http://" + host + url_next
+        j['next'] = "https://" + host + url_next
 
     if page.has_previous():
         url_prev = urlresolvers.reverse('chronam_batches_json_page', args=[page.previous_page_number()])
-        j['previous'] = "http://" + host + url_prev
+        j['previous'] = "https://" + host + url_prev
     return HttpResponse(json.dumps(j, indent=2), content_type='application/json')
 
 
@@ -391,7 +391,7 @@ def awardees_json(request):
     awardees = {"awardees": []}
     host = request.get_host()
     for awardee in models.Awardee.objects.all().order_by('name'):
-        a = {'url': 'http://' + host + awardee.json_url,
+        a = {'url': 'https://' + host + awardee.json_url,
              'name': awardee.name, }
         awardees['awardees'].append(a)
 
@@ -416,7 +416,7 @@ def awardee_json(request, institution_code):
     j = awardee.json(serialize=False, host=host)
     j['batches'] = []
     for batch in awardee.batches.all():
-        j['batches'].append({"name": batch.name, "url": 'http://' + host + batch.json_url})
+        j['batches'].append({"name": batch.name, "url": 'https://' + host + batch.json_url})
     return HttpResponse(json.dumps(j, indent=2), content_type='application/json')
 
 

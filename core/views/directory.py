@@ -91,13 +91,13 @@ def newspapers(request, state=None, format='html'):
         writer.writerow(csv_header_labels)
         for state, titles in newspapers_by_state:
             for title in titles:
-                writer.writerow(('http://%s%s' % (request.get_host(), 
+                writer.writerow(('https://%s%s' % (request.get_host(), 
                                                   reverse('chronam_issues', 
                                                            kwargs={'lccn': title.lccn}),),
                                  state, title, title.lccn or '', title.oclc or '',
                                  title.issn or '', title.issues.count(), title.first, 
                                  title.last, 
-                                 'http://%s%s' % (request.get_host(),
+                                 'https://%s%s' % (request.get_host(),
                                                   reverse('chronam_title_essays',
                                                            kwargs={'lccn': title.lccn}),),))
         return response
@@ -110,7 +110,7 @@ def newspapers(request, state=None, format='html'):
                 results["newspapers"].append({
                     "lccn": title.lccn,
                     "title": title.display_name,
-                    "url": "http://" + host + title.json_url,
+                    "url": "https://" + host + title.json_url,
                     "state": state
                 })
 
@@ -232,7 +232,7 @@ def search_titles_results(request):
         page_list.append((page_start, page.object_list[p]))
 
     if format == 'atom':
-        feed_url = 'http://' + host + request.get_full_path()
+        feed_url = 'https://' + host + request.get_full_path()
         updated = rfc3339(datetime.datetime.now())
         return render_to_response('search_titles_results.xml',
                                   dictionary=locals(),
@@ -249,7 +249,7 @@ def search_titles_results(request):
         }
         # add url for the json view
         for i in results['items']:
-            i['url'] = 'http://' + request.get_host() + i['id'].rstrip("/") + ".json"
+            i['url'] = 'https://' + request.get_host() + i['id'].rstrip("/") + ".json"
         json_text = json.dumps(results, indent=2)
         # jsonp?
         if request.GET.get('callback') is not None:
